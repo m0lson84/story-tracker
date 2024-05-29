@@ -1,0 +1,51 @@
+# -----------------------------------------------------------------
+# Stories
+# -----------------------------------------------------------------
+
+@endpoint={{BASE_URL}}
+@id={{STORY_ID}}
+@username={{USERNAME}}
+
+###
+
+# Create a story
+POST {{endpoint}}/api/v1/stories HTTP/1.1
+content-type: application/json
+accept: application/json
+
+{
+  "userId": 1,
+  "title": "Do Work",
+  "description": "As a user, I want to do work so that I can be productive.",
+  "type": "bug",
+  "status": "unstarted",
+  "points": "three"
+}
+
+###
+
+# Delete a story
+DELETE {{endpoint}}/api/v1/stories/{{id}} HTTP/1.1
+
+###
+
+# Get a story
+GET {{endpoint}}/api/v1/stories/{{id}} HTTP/1.1
+
+###
+
+# List stories
+GET {{endpoint}}/api/v1/stories HTTP/1.1
+
+###
+
+# Update a user
+PUT {{endpoint}}/api/v1/stories/{{id}} HTTP/1.1
+content-type: application/json
+accept: application/json
+
+{
+  "type": "bug",
+  "title": "Foo Bar"
+}
+

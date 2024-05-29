@@ -1,0 +1,18 @@
+# General
+*.md
+docs
+test
+tools
+
+# Docker
+.dockerignore
+Dockerfile
+
+# Configuration
+.devcontainer
+.github
+.vscode
+
+# Environment
+*.env
+*.env.*

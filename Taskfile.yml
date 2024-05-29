@@ -1,0 +1,116 @@
+version: "3"
+
+vars:
+  PROJECT: story-tracker
+  VERSION: 0.1.0
+  OUTPUT_DIR: bin
+  BINARY_NAME: "{{.PROJECT}}"
+  BINARY_PATH: "./{{.OUTPUT_DIR}}/{{.BINARY_NAME}}"
+  ENV_FILE: config/local.env
+  DB_COMPOSE_FILE: tools/db/compose.db.yml
+
+tasks:
+  default:
+    desc: Default task - builds the application
+    cmds:
+      - task: build
+
+  get:
+    desc: Get project dependencies
+    cmds:
+      - echo "Downloading dependencies..."
+      - go mod download
+
+  build:
+    desc: Build the application
+    deps:
+      - gen:sqlc
+    cmds:
+      - echo "Building web application..."
+      - go build -v -o {{.BINARY_PATH}} cmd/api/main.go
+
+  run:
+    desc: Run the application
+    cmds:
+      - echo "Running application..."
+      - go run cmd/api/main.go
+
+  watch:
+    desc: Live reload
+    cmds:
+      - echo "Running {{.BINARY_NAME}} in watch mode..."
+      - go tool air
+
+  clean:
+    desc: Clean the binary
+    cmds:
+      - echo "Cleaning project..."
+      - rm -rf {{.OUTPUT_DIR}}
+
+  test:
+    desc: Run test suite
+    cmds:
+      - echo "Running tests..."
+      - go tool gotestsum ./... -v
+
+  coverage:
+    desc: Run test suite with code coverage
+    cmds:
+      - echo "Running tests with coverage..."
+      - go tool gotestsum ./... -coverprofile=coverage.out
+
+  lint:
+    desc: Run static analysis
+    preconditions:
+      - sh: command -v golangci-lint
+        msg: "golangci-lint not found; install via go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"
+    cmd: golangci-lint run
+
+  fmt:
+    desc: Run code formatting
+    preconditions:
+      - sh: command -v golangci-lint
+        msg: "golangci-lint not found; install via go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"
+    cmd: golangci-lint fmt
+
+  gen:sqlc:
+    desc: Generate code from SQL using sqlc
+    cmds:
+      - echo "Generating code from SQL..."
+      - sqlc generate
+
+  docker:build:
+    desc: Build docker image
+    cmds:
+      - echo "Building docker image..."
+      - docker build -t {{.PROJECT}} -f build/Dockerfile .
+
+  docker:run:
+    desc: Run docker container
+    cmds:
+      - echo "Running containerized application..."
+      - docker run -it -p 8080:8080 -t {{.PROJECT}}:latest
+
+  db:up:
+    desc: Standup local database instance
+    cmds:
+      - echo "Starting database instance..."
+      - docker compose -f {{.DB_COMPOSE_FILE}} --env-file {{.ENV_FILE}} up -d
+
+  db:down:
+    desc: Shutdown local database instance
+    cmds:
+      - echo "Shutting down database..."
+      - docker compose -f {{.DB_COMPOSE_FILE}} down
+
+  migrate:up:
+    desc: Execute pending database migrations
+    cmds:
+      - echo "Running database migrations..."
+      - dbmate --env-file {{.ENV_FILE}} --migrations-dir db/schema --migrations-table migrations up
+
+  migrate:down:
+    desc: Revert the last database migration
+    cmds:
+      - echo "Reverting last database migration..."
+      - dbmate --env-file {{.ENV_FILE}} --migrations-dir db/schema --migrations-table migrations down

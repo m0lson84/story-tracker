@@ -1,0 +1,40 @@
+# -----------------------------------------------------------------
+# Users
+# -----------------------------------------------------------------
+
+@endpoint={{BASE_URL}}
+@id={{USER_ID}}
+@username={{USERNAME}}
+
+###
+
+# Create a user
+POST {{endpoint}}/api/v1/users HTTP/1.1
+content-type: application/json
+accept: application/json
+
+{
+  "username": "{{username}}"
+}
+
+###
+
+# Delete a user
+DELETE {{endpoint}}/api/v1/users/{{id}} HTTP/1.1
+
+###
+
+# Get a user
+GET {{endpoint}}/api/v1/users/{{id}} HTTP/1.1
+
+###
+
+# Update a user
+PUT {{endpoint}}/api/v1/users/{{id}} HTTP/1.1
+content-type: application/json
+accept: application/json
+
+{
+  "username": "{{username}}"
+}
+

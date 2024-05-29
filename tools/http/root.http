@@ -1,0 +1,27 @@
+# -----------------------------------------------------------------
+# Root
+# -----------------------------------------------------------------
+
+@endpoint={{BASE_URL}}
+
+###
+
+# Hello World
+GET {{endpoint}} HTTP/1.1
+
+###
+
+# Health Check
+GET {{endpoint}}/health HTTP/1.1
+
+###
+
+# Docs
+GET {{endpoint}}/docs/index.html HTTP/1.1
+accept: text/html
+
+###
+
+# OpenAPI
+GET {{endpoint}}/openapi.json HTTP/1.1
+accept: application/json
