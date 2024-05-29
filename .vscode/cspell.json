@@ -1,0 +1,24 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": ["godotenv", "huma", "magefile", "requestid", "sqlc"],
+  "ignoreRegExpList": ["fiber", "golang", "huma", "logging"],
+  "patterns": [
+    {
+      "name": "fiber",
+      "pattern": ["fiber(zap)", "go(fiber)"]
+    },
+    {
+      "name": "golang",
+      "pattern": ["go(mod|sum|testsum)", "go(fmt|fumpt|imports|langci)"]
+    },
+    {
+      "name": "huma",
+      "pattern": ["huma(cli|fiber)"]
+    },
+    {
+      "name": "logging",
+      "pattern": "\\.(Info|Error|Warn|Debug|Fatal|Trace)(f|w)"
+    }
+  ]
+}
