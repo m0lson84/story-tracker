@@ -1,0 +1,16 @@
+[sqlfluff]
+dialect = postgres
+templater = placeholder
+exclude_rules = layout.end_of_file, layout.indent, layout.cte_bracket, layout.select_targets, layout.spacing
+max_line_length = 88
+
+[sqlfluff:rules]
+capitalisation_policy = lower
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:convention.terminator]
+multiline_newline = True
+
+[sqlfluff:templater:placeholder]
+param_style = numeric_dollar
+
